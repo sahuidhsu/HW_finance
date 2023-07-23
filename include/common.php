@@ -1,10 +1,10 @@
 <?php
-header('Content-Type: text/html; charset=UTF-8');
-include "../config.php";
+include $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 global $Sys_config, $conn;
 try{
-    $conn = new PDO("mysql:host={$Sys_config["db_host"]};dbname={$Sys_config["db_database"]};", $Sys_config["db_user"], $Sys_config["db_password"]);
+    $conn = new PDO("mysql:host={$Sys_config["db_host"]};dbname={$Sys_config["db_database"]};",
+        $Sys_config["db_user"], $Sys_config["db_password"]);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); // 禁用prepared statements的模拟效果
     $conn->exec("set names utf8"); //设置编码
@@ -69,6 +69,8 @@ function login($username, $password): array
     <meta charset="utf-8">
     <title>资金周转记录系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="bootstrap.min.css" rel="stylesheet">
-    <script src="bootstrap.min.js">
+    <link href="include/bootstrap.min.css" rel="stylesheet">
+    <link href="include/fa.css" rel="stylesheet">
+    <script src="include/bootstrap.min.js" type="application/javascript"></script>
+    <script src="include/fa.js" type="application/javascript"></script>
 </head>
