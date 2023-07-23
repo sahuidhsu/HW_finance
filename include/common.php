@@ -88,15 +88,26 @@ function register($username, $password, $department): array
         return array(false, "该用户名已存在，请更换用户名");
     }
 }
+
+function isAdmin($username): bool
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT admin FROM user WHERE username=:username;");
+    $stmt->execute(['username' => $username]);
+    if ($stmt->fetch()["admin"] == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="utf-8">
-    <title>资金周转记录系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="include/bootstrap.min.css" rel="stylesheet">
-    <link href="include/fa.css" rel="stylesheet">
-    <script src="include/bootstrap.min.js" type="application/javascript"></script>
-    <script src="include/fa.js" type="application/javascript"></script>
+    <link href="/include/bootstrap.min.css" rel="stylesheet">
+    <link href="/include/fa.css" rel="stylesheet">
+    <script src="/include/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/include/fa.js" type="application/javascript"></script>
 </head>

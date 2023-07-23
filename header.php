@@ -13,3 +13,41 @@ if (isset($_GET['logout'])) {
     echo "<script>window.location.href='login.php';</script>";
     exit();
 }
+global $conn;
+if (php_self() != "login.php" && php_self() != "register.php")  {
+    echo '<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.php">首页</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="out.php">支出</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="in.php">收入</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="detail.php">查询</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="password.php">修改密码</a>
+                </li>';
+                $sql = "SELECT admin FROM user WHERE username=:username;";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute(['username' => $_SESSION["username"]]);
+                $result = $stmt->fetch();
+                if ($result["admin"] == 1) {
+                    echo '<li class="nav-item">
+                    <a class="nav-link" href="/admin">管理面板</a>
+                    </li>';
+                }
+    echo '</ul>
+            <a href="index.php?logout" class="btn btn-danger">登出</a>
+        </div>
+    </div>
+</nav>';
+}
