@@ -1,6 +1,7 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
+error_reporting(0);
 global $Sys_config, $conn;
 try{
     $conn = new PDO("mysql:host={$Sys_config["db_host"]};dbname={$Sys_config["db_database"]};",
@@ -49,10 +50,13 @@ function login($username, $password): array
 {
     global $conn;
     if (get_id_by_username($username) != -1) {
-        $sql = $conn->prepare("SELECT password FROM user WHERE username=:username;");
+        $sql = $conn->prepare("SELECT password, valid FROM user WHERE username=:username;");
         $sql->execute(['username' => $username]);
-        $password_result = $sql->fetch()["password"];
-        if (password_verify($password, $password_result)) {
+        $result = $sql->fetch();
+        if ($result[1] == 0) {
+            return array(false, "该账号尚未通过管理员审批，暂时无法登录，请耐心等待或联系管理员");
+        }
+        if (password_verify($password, $result[0])) {
             return array(true, "登录成功");
         } else {
             return array(false, "密码错误");
@@ -62,6 +66,28 @@ function login($username, $password): array
     }
 }
 
+function register($username, $password, $department): array
+{
+    global $conn;
+    // 检查部门是否存在
+    $sql = $conn->prepare("SELECT id FROM department WHERE id=:id;");
+    $sql->execute(['id' => $department]);
+    if ($sql->rowCount() == 0) {
+        return array(false, "部门不存在，请检查输入");
+    }
+    if (get_id_by_username($username) == -1) {
+        try {
+            $sql = $conn->prepare("INSERT INTO user (username, password, department_id) VALUES (:username, :password, :department);");
+            $sql->execute(['username' => $username, 'password' => password_hash($password, PASSWORD_DEFAULT), 'department' => $department]);
+        }
+        catch (PDOException $e){
+            return array(false, "注册失败，数据库错误，错误信息：" . $e->getMessage());
+        }
+        return array(true, "注册成功");
+    } else {
+        return array(false, "该用户名已存在，请更换用户名");
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="zh">
