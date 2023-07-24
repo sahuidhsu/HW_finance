@@ -3,8 +3,9 @@ include "header.php";
 global $conn;
 if (isset($_POST["submit"])) {
     try {
-        $sql = $conn->prepare("UPDATE department SET name=:name WHERE id=:id;");
-        $sql->execute(['name' => $_POST["name"], 'id' => $_GET["id"]]);
+        $sql = $conn->prepare("UPDATE department SET name=:name, sum=:sum WHERE id=:id;");
+        $switch_result = $_POST["sum"] == "on" ? 1 : 0;
+        $sql->execute(['name' => $_POST["name"], 'sum' => $switch_result, 'id' => $_GET["id"]]);
         echo "<script>window.location.href='department.php';</script>";
     }
     catch (PDOException $e) {
@@ -59,6 +60,11 @@ echo "
             <div class='input-group mb-3'>
                 <span class='input-group-text' id='name'>部门名称</span>
                 <input type='text' class='form-control' name='name' value='{$result['name']}' required>
+            </div>
+            <div class='form-check mb-3 form-switch'>
+                <input class='form-check-input' type='checkbox' role='switch' name='sum' id='sum'";
+                echo $result["sum"] == 1 ? "checked>" : ">";
+                echo "<label class='form-check-label' for='sum'>纳入总计</label>
             </div>
             <input type='submit' name='submit' class='btn btn-primary btn-block' value='保存'>
         </form>

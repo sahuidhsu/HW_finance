@@ -17,7 +17,7 @@ include "header.php";
         <h3 class="card-header">服务器信息</h3>
         <ul class="list-group">
             <li class="list-group-item">
-                <b>PHP版本:</b><?php echo phpversion() ?>
+                <b>PHP版本:</b> <?php echo phpversion() ?>
                 <?php if (ini_get('safe_mode')) {
                     echo '线程安全';
                 } else {

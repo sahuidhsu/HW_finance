@@ -43,6 +43,7 @@ include "header.php";
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">部门名</th>
+                    <th scope="col">纳入总计</th>
                     <th scope="col">操作</th>
                 </tr>
                 </thead>
@@ -55,6 +56,8 @@ include "header.php";
                     echo "<tr>";
                     echo "<th scope=\"row\">" . $row["id"] . "</th>";
                     echo "<td>" . $row["name"] . "</td>";
+                    if ($row["sum"] == 1) echo "<td style='color: blue'>是</td>";
+                        else echo "<td style='color: red;'>否</td>";
                     echo "<td><a href='edit_department.php?action=edit&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">编辑</button></a>
                             <a onclick='return del()' href='edit_department.php?action=delete&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-danger\">删除</button></a></td>";
                     echo "</tr>";

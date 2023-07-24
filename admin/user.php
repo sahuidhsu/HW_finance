@@ -46,7 +46,7 @@ include "header.php";
                     $result2 = $sql->fetch();
                     echo "<td>" . $result2["name"] . "</td>";
                     if ($row["admin"] == 1) {
-                        echo "<td>是</td>";
+                        echo "<td style='color: red'>是</td>";
                     } else {
                         echo "<td>否</td>";
                     }
