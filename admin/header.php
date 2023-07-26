@@ -29,6 +29,9 @@ if (php_self() != "login.php" && php_self() != "register.php")  {
                     <a class="nav-link" href="department.php">部门管理</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="fee.php">费用管理</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="review.php">审核</a>
                 </li>
                 <li class="nav-item">

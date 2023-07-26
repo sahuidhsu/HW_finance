@@ -2,6 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 error_reporting(0);
+date_default_timezone_set('asia/shanghai');
 global $Sys_config, $conn;
 try{
     $conn = new PDO("mysql:host={$Sys_config["db_host"]};dbname={$Sys_config["db_database"]};",
