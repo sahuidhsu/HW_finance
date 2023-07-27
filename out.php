@@ -24,12 +24,11 @@ if (isset($_POST["submit"])) {
                                                          (:amount, :fee_id, :sum, :user_id, :add_time);");
         $sql->execute(['amount' => $_POST["amount"], 'fee_id' => $_POST["fee"], 'sum' => $sum,
             'user_id' => $result["id"], 'add_time' => date("Y-m-d H:i:s")]);
-        echo "<script>alert('添加成功！');window.location.href='index.php';</script>";
+        echo "<div class='alert alert-success' role='alert'>添加成功！等待管理员审核</div>";
     }
     catch (PDOException $e) {
         echo "<div class='alert alert-danger' role='alert'>数据库错误，错误信息：" . $e->getMessage() . "</div>";
     }
-    exit;
 }
 ?>
 <head>
