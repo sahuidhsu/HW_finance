@@ -31,7 +31,7 @@ if (php_self() != "login.php" && php_self() != "register.php")  {
                     <a class="nav-link" href="in.php">收入</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="detail.php">查询</a>
+                    <a class="nav-link" href="detail.php">明细</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="password.php">修改密码</a>
@@ -46,7 +46,8 @@ if (php_self() != "login.php" && php_self() != "register.php")  {
                     </li>';
                 }
     echo '</ul>
-            <a href="index.php?logout" class="btn btn-danger">登出</a>
+            已登录用户：' . $_SESSION["username"] . '
+            <a style="margin-left: 10px" href="index.php?logout" class="btn btn-danger">登出</a>
         </div>
     </div>
 </nav>';

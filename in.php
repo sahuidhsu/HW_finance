@@ -20,7 +20,7 @@ if (isset($_POST["submit"])) {
         exit;
     }
     try {
-        $sql = $conn->prepare("INSERT INTO out_fee (amount, fee_id, sum, user_id, add_time) VALUES 
+        $sql = $conn->prepare("INSERT INTO in_fee (amount, fee_id, sum, user_id, add_time) VALUES 
                                                          (:amount, :fee_id, :sum, :user_id, :add_time);");
         $sql->execute(['amount' => $_POST["amount"], 'fee_id' => $_POST["fee"], 'sum' => $sum,
             'user_id' => $result["id"], 'add_time' => date("Y-m-d H:i:s")]);
@@ -33,13 +33,13 @@ if (isset($_POST["submit"])) {
 ?>
 <head>
     <title>
-        添加支出 - 资金周转管理系统
+        添加收入 - 资金周转管理系统
     </title>
 </head>
 <body>
 <div class='container' style='margin-top: 2%;'>
     <div class='card border-dark'>
-        <h4 class='card-header bg-primary text-white text-center'>添加支出</h4>
+        <h4 class='card-header bg-primary text-white text-center'>添加收入</h4>
         <form action='' method='post' style='margin: 20px;'>
             <div class='input-group mb-3'>
                 <span class='input-group-text' id='amount'><i class="fa fa-money-bill" style="margin-right: 5px"></i>数额</span>
@@ -65,12 +65,12 @@ if (isset($_POST["submit"])) {
     </div>
     <?php
     $user_id = $result["id"];
-    $sql = $conn->prepare("SELECT * FROM out_fee WHERE user_id=:user_id ORDER BY id DESC;");
+    $sql = $conn->prepare("SELECT * FROM in_fee WHERE user_id=:user_id ORDER BY id DESC;");
     $sql->execute(['user_id' => $user_id]);
     $out_result = $sql->fetchAll();
     ?>
     <br>
-    <h2 style="text-align: center;">我提交的支出历史</h2>
+    <h2 style="text-align: center;">我提交的收入历史</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>

@@ -38,7 +38,8 @@ if (php_self() != "login.php" && php_self() != "register.php")  {
                     <a class="nav-link" href="../index.php">返回主页</a>
                 </li>
                 </ul>
-            <a href="../index.php?logout" class="btn btn-danger">登出</a>
+            已登录管理员账号：' . $_SESSION["username"] . '
+            <a style="margin-left: 10px" href="../index.php?logout" class="btn btn-danger">登出</a>
         </div>
     </div>
 </nav>';
