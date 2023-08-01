@@ -20,10 +20,10 @@ if (isset($_POST["submit"])) {
         exit;
     }
     try {
-        $sql = $conn->prepare("INSERT INTO in_fee (amount, fee_id, sum, user_id, add_time) VALUES 
-                                                         (:amount, :fee_id, :sum, :user_id, :add_time);");
+        $sql = $conn->prepare("INSERT INTO in_fee (amount, fee_id, sum, user_id, add_time, project_id) VALUES 
+                                                         (:amount, :fee_id, :sum, :user_id, :add_time, :project);");
         $sql->execute(['amount' => $_POST["amount"], 'fee_id' => $_POST["fee"], 'sum' => $sum,
-            'user_id' => $result["id"], 'add_time' => date("Y-m-d H:i:s")]);
+            'user_id' => $result["id"], 'add_time' => date("Y-m-d H:i:s"), 'project' => $_POST["project"]]);
         echo "<div class='alert alert-success' role='alert'>添加成功！等待管理员审核</div>";
     }
     catch (PDOException $e) {
@@ -41,6 +41,19 @@ if (isset($_POST["submit"])) {
     <div class='card border-dark'>
         <h4 class='card-header bg-primary text-white text-center'>添加收入</h4>
         <form action='' method='post' style='margin: 20px;'>
+            <div class='input-group mb-3'>
+                <span class='input-group-text' id='project'>所属项目</span>
+                <select class='form-select' name='project'>
+                    <?php
+                    $sql2 = $conn->prepare("SELECT * FROM project;");
+                    $sql2->execute();
+                    $result3 = $sql2->fetchAll();
+                    foreach ($result3 as $row) {
+                        echo "<option value='" . $row["id"] . "'>" . $row["name"] . "</option>";
+                    }
+                    ?>
+                </select>
+            </div>
             <div class='input-group mb-3'>
                 <span class='input-group-text' id='amount'><i class="fa fa-money-bill" style="margin-right: 5px"></i>数额</span>
                 <input type='text' class='form-control' oninput="value=value.replace(/[^\d\.]/g,'')" name='amount' required>
@@ -65,12 +78,12 @@ if (isset($_POST["submit"])) {
     </div>
     <?php
     $user_id = $result["id"];
-    $sql = $conn->prepare("SELECT * FROM in_fee WHERE user_id=:user_id ORDER BY id DESC;");
+    $sql = $conn->prepare("SELECT * FROM in_fee WHERE user_id=:user_id ORDER BY id DESC LIMIT 10;");
     $sql->execute(['user_id' => $user_id]);
     $out_result = $sql->fetchAll();
     ?>
     <br>
-    <h2 style="text-align: center;">我提交的收入历史</h2>
+    <h2 style="text-align: center;">我提交的最近10条收入历史</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -78,6 +91,7 @@ if (isset($_POST["submit"])) {
                 <th scope="col">#</th>
                 <th scope="col">数额</th>
                 <th scope="col">费用类型</th>
+                <th scope="col">所属项目</th>
                 <th scope="col">添加时间</th>
                 <th scope="col">审核状态</th>
             </tr>
@@ -89,6 +103,10 @@ if (isset($_POST["submit"])) {
                 $sql->execute(['id' => $row["fee_id"]]);
                 $fee_result = $sql->fetch();
                 $status_result = $row["valid"];
+                $sql = $conn->prepare("SELECT name FROM project WHERE id=:id;");
+                $sql->execute(['id' => $row["project_id"]]);
+                $project_result = $sql->fetch();
+                $project = $project_result["name"];
                 if ($status_result == 0) {
                     $status = "<span class='badge bg-warning text-dark'>待审核</span>";
                 }
@@ -98,7 +116,7 @@ if (isset($_POST["submit"])) {
                 else {
                     $status = "<span class='badge bg-danger'>未知状态</span>";
                 }
-                echo "<tr><th scope='row'>" . $row["id"] . "</th><td>" . $row["amount"] . "</td><td>" . $fee_result["name"] . "</td><td>" . $row["add_time"] . "</td><td>" . $status . "</td></tr>";
+                echo "<tr><th scope='row'>" . $row["id"] . "</th><td>" . $row["amount"] . "</td><td>" . $fee_result["name"] . "</td><td>" . $project . "</td><td>" . $row["add_time"] . "</td><td>" . $status . "</td></tr>";
             }
             ?>
             </tbody>

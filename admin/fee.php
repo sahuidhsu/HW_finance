@@ -18,19 +18,21 @@ global $conn;
     <div class="col-md-10 center-block" style="float: none;">
         <div class="table-responsive">
             <form action="" method="post">
-                <input placeholder="费用名" type="text" name="name">
-                <select name="department_id">
-                    <option value="" selected disabled>请选择一个部门</option>
-                    <?php
-                    $sql = $conn->prepare("SELECT * FROM department;");
-                    $sql->execute();
-                    $result = $sql->fetchAll();
-                    foreach ($result as $row) {
-                        echo "<option value='" . $row["id"] . "'>" . $row["name"] . "</option>";
-                    }
-                    ?>
-                </select>
-                <button type="submit" name="submit" class="btn btn-success">新增</button>
+                <div class="input-group">
+                    <input placeholder="费用名" type="text" name="name">
+                    <select name="department_id">
+                        <option value="" selected disabled>请选择一个部门</option>
+                        <?php
+                        $sql = $conn->prepare("SELECT * FROM department;");
+                        $sql->execute();
+                        $result = $sql->fetchAll();
+                        foreach ($result as $row) {
+                            echo "<option value='" . $row["id"] . "'>" . $row["name"] . "</option>";
+                        }
+                        ?>
+                    </select>
+                    <button type="submit" name="submit" class="btn btn-success">新增</button>
+                </div>
             </form>
             <?php
             if (isset($_POST["submit"])) {

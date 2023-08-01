@@ -53,6 +53,7 @@ if (isset($_GET["action"])) {
                     <th scope="col">#</th>
                     <th scope="col">数额</th>
                     <th scope="col">费用类型</th>
+                    <th scope="col">所属项目</th>
                     <th scope="col">提交人</th>
                     <th scope="col">添加时间</th>
                     <th scope="col">操作</th>
@@ -71,6 +72,10 @@ if (isset($_GET["action"])) {
                     $sql->execute(["id" => $row["fee_id"]]);
                     $result2 = $sql->fetch();
                     echo "<td>" . $result2["name"] . "</td>";
+                    $sql = $conn->prepare("SELECT name FROM project WHERE id=:id;");
+                    $sql->execute(['id' => $row["project_id"]]);
+                    $project_result = $sql->fetch();
+                    echo "<td>" . $project_result["name"] . "</td>";
                     $sql = $conn->prepare("SELECT username FROM user WHERE id = :id;");
                     $sql->execute(["id" => $row["user_id"]]);
                     $result2 = $sql->fetch();
@@ -90,6 +95,7 @@ if (isset($_GET["action"])) {
                         <th scope="col">#</th>
                         <th scope="col">数额</th>
                         <th scope="col">费用类型</th>
+                        <th scope="col">所属项目</th>
                         <th scope="col">提交人</th>
                         <th scope="col">添加时间</th>
                         <th scope="col">操作</th>
@@ -108,6 +114,10 @@ if (isset($_GET["action"])) {
                         $sql->execute(["id" => $row["fee_id"]]);
                         $result2 = $sql->fetch();
                         echo "<td>" . $result2["name"] . "</td>";
+                        $sql = $conn->prepare("SELECT name FROM project WHERE id=:id;");
+                        $sql->execute(['id' => $row["project_id"]]);
+                        $project_result = $sql->fetch();
+                        echo "<td>" . $project_result["name"] . "</td>";
                         $sql = $conn->prepare("SELECT username FROM user WHERE id = :id;");
                         $sql->execute(["id" => $row["user_id"]]);
                         $result2 = $sql->fetch();
