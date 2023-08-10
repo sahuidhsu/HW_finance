@@ -30,12 +30,24 @@ global $conn;
     $sql = $conn->prepare("SELECT SUM(amount) FROM out_fee WHERE sum = 1 AND valid = 0;");
     $sql->execute();
     $out_not_valid = $sql->fetch()[0];
-    $sql = $conn->prepare("SELECT SUM(amount) FROM in_fee WHERE sum = 1;");
+    $sql = $conn->prepare("SELECT SUM(amount) FROM in_fee;");
     $sql->execute();
     $in_total = $sql->fetch()[0];
-    $sql = $conn->prepare("SELECT SUM(amount) FROM in_fee WHERE sum = 1 AND valid = 0;");
+    $sql = $conn->prepare("SELECT SUM(amount) FROM in_fee WHERE valid = 0;");
     $sql->execute();
     $in_not_valid = $sql->fetch()[0];
+    if ($out_not_valid == null) {
+        $out_not_valid = 0;
+    }
+    if ($in_not_valid == null) {
+        $in_not_valid = 0;
+    }
+    if ($in_total == null) {
+        $in_total = 0;
+    }
+    if ($out_total == null) {
+        $out_total = 0;
+    }
     echo "<h3>总计支出金额：<b>{$out_total}（含{$out_not_valid}未审核金额）</b></h3>";
     echo "<br>";
     echo "<h3>总计收入金额：<b>{$in_total}（含{$in_not_valid}未审核金额）</b></h3>";
@@ -47,6 +59,7 @@ global $conn;
             <tr>
                 <th scope="col">数额</th>
                 <th scope="col">费用类型</th>
+                <th scope="col">备注</th>
                 <th scope="col">所属项目</th>
                 <th scope="col">提交人</th>
                 <th scope="col">添加时间</th>
@@ -65,6 +78,7 @@ global $conn;
                 $sql->execute(["id" => $row["fee_id"]]);
                 $result2 = $sql->fetch();
                 echo "<td>" . $result2["name"] . "</td>";
+                echo "<td>" . $row["comment"] . "</td>";
                 $sql = $conn->prepare("SELECT name FROM project WHERE id = :id");
                 $sql->execute(["id" => $row["project_id"]]);
                 $result2 = $sql->fetch();
@@ -91,8 +105,8 @@ global $conn;
             <thead>
             <tr>
                 <th scope="col">数额</th>
-                <th scope="col">费用类型</th>
                 <th scope="col">所属项目</th>
+                <th scope="col">备注</th>
                 <th scope="col">提交人</th>
                 <th scope="col">添加时间</th>
                 <th scope="col">审核状态</th>
@@ -106,14 +120,11 @@ global $conn;
             foreach ($result as $row) {
                 echo "<tr>";
                 echo "<td>" . $row["amount"] . "</td>";
-                $sql = $conn->prepare("SELECT name FROM fee WHERE id = :id;");
-                $sql->execute(["id" => $row["fee_id"]]);
-                $result2 = $sql->fetch();
-                echo "<td>" . $result2["name"] . "</td>";
                 $sql = $conn->prepare("SELECT name FROM project WHERE id = :id");
                 $sql->execute(["id" => $row["project_id"]]);
                 $result2 = $sql->fetch();
                 echo "<td>" . $result2["name"] . "</td>";
+                echo "<td>" . $row["comment"] . "</td>";
                 $sql = $conn->prepare("SELECT username FROM user WHERE id = :id;");
                 $sql->execute(["id" => $row["user_id"]]);
                 $result2 = $sql->fetch();

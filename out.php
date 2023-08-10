@@ -20,10 +20,11 @@ if (isset($_POST["submit"])) {
         exit;
     }
     try {
-        $sql = $conn->prepare("INSERT INTO out_fee (amount, fee_id, sum, user_id, add_time, project_id) VALUES 
-                                                         (:amount, :fee_id, :sum, :user_id, :add_time, :project);");
+        $sql = $conn->prepare("INSERT INTO out_fee (amount, fee_id, sum, user_id, add_time, project_id, comment) VALUES 
+                                                         (:amount, :fee_id, :sum, :user_id, :add_time, :project, :comment);");
         $sql->execute(['amount' => $_POST["amount"], 'fee_id' => $_POST["fee"], 'sum' => $sum,
-            'user_id' => $result["id"], 'add_time' => date("Y-m-d H:i:s"), 'project' => $_POST["project"]]);
+            'user_id' => $result["id"], 'add_time' => date("Y-m-d H:i:s"), 'project' => $_POST["project"],
+            'comment' => $_POST["comment"]]);
         echo "<div class='alert alert-success' role='alert'>添加成功！等待管理员审核</div>";
     }
     catch (PDOException $e) {
@@ -42,7 +43,7 @@ if (isset($_POST["submit"])) {
         <h4 class='card-header bg-primary text-white text-center'>添加支出</h4>
         <form action='' method='post' style='margin: 20px;'>
             <div class='input-group mb-3'>
-                <span class='input-group-text' id='project'>所属项目</span>
+                <span class='input-group-text' id='project'><i class="fa fa-diagram-project" style="margin-right: 5px"></i>所属项目</span>
                 <select class='form-select' name='project'>
                     <?php
                     $sql2 = $conn->prepare("SELECT * FROM project;");
@@ -59,7 +60,7 @@ if (isset($_POST["submit"])) {
                 <input type='text' class='form-control' oninput="value=value.replace(/[^\d\.]/g,'')" name='amount' required>
             </div>
             <div class='input-group mb-3'>
-                <span class='input-group-text' id='fee'>费用类型</span>
+                <span class='input-group-text' id='fee'><i class="fa fa-landmark" style="margin-right: 5px"></i>费用类型</span>
                 <select class='form-select' name='fee'>
                 <?php
                     $sql2 = $conn->prepare("SELECT * FROM fee;");
@@ -72,6 +73,10 @@ if (isset($_POST["submit"])) {
                     }
                 ?>
                 </select>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="comment"><i class="fa fa-file-lines" style="margin-right: 5px"></i>备注</span>
+                <input type="text" class="form-control" name="comment">
             </div>
             <input type='submit' name='submit' class='btn btn-primary btn-block' value='保存'>
         </form>
@@ -91,6 +96,7 @@ if (isset($_POST["submit"])) {
                 <th scope="col">#</th>
                 <th scope="col">数额</th>
                 <th scope="col">费用类型</th>
+                <th scope="col">备注</th>
                 <th scope="col">所属项目</th>
                 <th scope="col">添加时间</th>
                 <th scope="col">审核状态</th>
@@ -116,7 +122,9 @@ if (isset($_POST["submit"])) {
                 else {
                     $status = "<span class='badge bg-danger'>未知状态</span>";
                 }
-                echo "<tr><th scope='row'>" . $row["id"] . "</th><td>" . $row["amount"] . "</td><td>" . $fee_result["name"] . "</td><td>" . $project . "</td><td>" . $row["add_time"] . "</td><td>" . $status . "</td></tr>";
+                echo "<tr><th scope='row'>" . $row["id"] . "</th><td>" . $row["amount"] . "</td><td>" .
+                    $fee_result["name"] . "</td><td>" . $row["comment"] . "</td><td>" . $project . "</td><td>" .
+                    $row["add_time"] . "</td><td>" . $status . "</td></tr>";
             }
             ?>
             </tbody>

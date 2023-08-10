@@ -53,6 +53,7 @@ if (isset($_GET["action"])) {
                     <th scope="col">#</th>
                     <th scope="col">数额</th>
                     <th scope="col">费用类型</th>
+                    <th scope="col">备注</th>
                     <th scope="col">所属项目</th>
                     <th scope="col">提交人</th>
                     <th scope="col">添加时间</th>
@@ -72,6 +73,7 @@ if (isset($_GET["action"])) {
                     $sql->execute(["id" => $row["fee_id"]]);
                     $result2 = $sql->fetch();
                     echo "<td>" . $result2["name"] . "</td>";
+                    echo "<td>" . $row["comment"] . "</td>";
                     $sql = $conn->prepare("SELECT name FROM project WHERE id=:id;");
                     $sql->execute(['id' => $row["project_id"]]);
                     $project_result = $sql->fetch();
@@ -94,7 +96,7 @@ if (isset($_GET["action"])) {
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">数额</th>
-                        <th scope="col">费用类型</th>
+                        <th scope="col">备注</th>
                         <th scope="col">所属项目</th>
                         <th scope="col">提交人</th>
                         <th scope="col">添加时间</th>
@@ -110,10 +112,7 @@ if (isset($_GET["action"])) {
                         echo "<tr>";
                         echo "<th scope=\"row\">" . $row["id"] . "</th>";
                         echo "<td>" . $row["amount"] . "</td>";
-                        $sql = $conn->prepare("SELECT name FROM fee WHERE id = :id;");
-                        $sql->execute(["id" => $row["fee_id"]]);
-                        $result2 = $sql->fetch();
-                        echo "<td>" . $result2["name"] . "</td>";
+                        echo "<td>" . $row["comment"] . "</td>";
                         $sql = $conn->prepare("SELECT name FROM project WHERE id=:id;");
                         $sql->execute(['id' => $row["project_id"]]);
                         $project_result = $sql->fetch();
