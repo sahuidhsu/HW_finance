@@ -51,9 +51,9 @@ $project_name = $sql->fetch()[0];
     <h2 style="text-align: center; margin-top: 15px">资金成本</h2>
     <form action="" method="post">
         <div class="input-group">
-            <span class="input-group-text">开始日期</span>
+            <span class="input-group-text">起息日期</span>
             <input type="date" class="form-control" name="start_date" <?php if (isset($_POST["start_date"])) echo "value=\"{$_POST["start_date"]}\"" ?> required>
-            <span class="input-group-text">结束日期</span>
+            <span class="input-group-text">止息日期</span>
             <input type="date" class="form-control" name="end_date" <?php if (isset($_POST["end_date"])) echo "value=\"{$_POST["end_date"]}\"" ?> required>
             <button class="btn btn-primary" name="interest" type="submit">计算</button>
         </div>
@@ -66,18 +66,30 @@ $project_name = $sql->fetch()[0];
             die("<script>alert('开始日期不能大于结束日期');window.location.href='detail_project.php?project_id={$project_id}';</script>");
         }
         else {
-            $start_time = $_POST["start_date"] . " 00:00:00";
-            $end_time = $_POST["end_date"] . " 23:59:59";
-            $sql = $conn->prepare("SELECT SUM(amount) FROM out_fee WHERE sum = 1 AND valid = 1 AND project_id = :project AND add_time BETWEEN :start AND :end;");
-            $sql->execute(["project" => $project_id, "start" => $start_time, "end" => $end_time]);
-            $out_total = $sql->fetch()[0];
-            if ($out_total == null) $out_total = 0;
-            $sql = $conn->prepare("SELECT SUM(amount) FROM in_fee WHERE valid = 1 AND project_id = :project AND add_time BETWEEN :start AND :end;");
-            $sql->execute(["project" => $project_id, "start" => $start_time, "end" => $end_time]);
-            $in_total = $sql->fetch()[0];
-            if ($in_total == null) $in_total = 0;
-            $interest = ($out_total - $in_total) * 0.8;
-            echo "<h3>资金成本：<b>{$interest}</b><br>计算公式：(<b>已审核</b>支出-<b>已审核</b>收入) * 0.8 (支出：{$out_total} 收入：{$in_total})</h3>";
+            $valid_in = $in_total - $in_not_valid;
+            if ($valid_in == null) $valid_in = 0;
+            $valid_out = $out_total - $out_not_valid;
+            if ($valid_out == null) $valid_out = 0;
+            $diff = $valid_out - $valid_in;
+            if ($valid_in >= $valid_out) {
+                echo "<h4><b>已审核</b>项目投入：{$valid_out}|<b>已审核</b>回款：{$valid_in}</h4>";
+                echo "<h3>当前回款大于等于项目投入，不进行资金成本计算</h3>";
+            }
+            else {
+                echo "<h4><b>已审核</b>项目投入：{$valid_out}|<b>已审核</b>回款：{$valid_in}|垫资本金(投入-回款)：{$diff}</h4>";
+                $start_date = date_create($_POST["start_date"]);
+                $end_date = date_create($_POST["end_date"]);
+                $duration = date_diff($start_date, $end_date)->days + 1;
+                echo "<h3>计息天数：{$duration}</h3>";
+                $sql = $conn->prepare("SELECT value FROM setting WHERE name='年利率'");
+                $sql->execute();
+                $year_interest = $sql->fetch()[0];
+                echo "<h4>当前年利率 = {$year_interest}% (管理员可在管理面板-系统设置中修改)</h4>";
+                $interest = $diff * $duration * ($year_interest/100) / 365;
+                $interest = round($interest, 2);
+                echo "<h3>资金占用利息：{$interest}</h3>";
+                echo "<h4>计算公式：垫资本金×计息天数×年利率÷365天</h4>";
+            }
         }
     }
     ?>

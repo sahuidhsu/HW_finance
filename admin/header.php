@@ -38,6 +38,9 @@ if (php_self() != "login.php" && php_self() != "register.php")  {
                     <a class="nav-link" href="review.php">审核</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="setting.php">网站设置</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="../index.php">返回主页</a>
                 </li>
                 </ul>
