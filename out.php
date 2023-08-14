@@ -60,6 +60,10 @@ if (isset($_POST["submit"])) {
                     $sql2 = $conn->prepare("SELECT * FROM project;");
                     $sql2->execute();
                     $result3 = $sql2->fetchAll();
+                    if ($result3 == null) {
+                        die("<script>alert('目前暂无项目，请管理员前往 管理面板-项目管理 添加至少一个项目！');
+                            window.location.href='index.php';</script>");
+                    }
                     foreach ($result3 as $row) {
                         echo "<option value='" . $row["id"] . "'>" . $row["name"] . "</option>";
                     }
