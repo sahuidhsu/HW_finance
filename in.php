@@ -1,6 +1,6 @@
 <?php
 include "header.php";
-global $conn;
+global $conn, $site_name;
 $username = $_SESSION["username"];
 $sql = $conn->prepare("SELECT * FROM user WHERE username=:username;");
 $sql->execute(['username' => $username]);
@@ -8,11 +8,22 @@ $result = $sql->fetch();
 $department_id = $result["department_id"];
 if (isset($_POST["submit"])) {
     try {
-        $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, add_time, project_id, comment) VALUES 
+        $sql = $conn->prepare("SELECT admin FROM user WHERE username=:name;");
+        $sql->execute(['name' => $username]);
+        $isAdmin = $sql->fetch()[0];
+        if ($isAdmin == "1"){
+            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, add_time, project_id, comment, valid) VALUES 
+                                                         (:amount, :user_id, :add_time, :project, :comment, 1);");
+        }
+        else {
+            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, add_time, project_id, comment) VALUES 
                                                          (:amount, :user_id, :add_time, :project, :comment);");
+        }
         $sql->execute(['amount' => $_POST["amount"], 'user_id' => $result["id"],
             'add_time' => date("Y-m-d H:i:s"), 'project' => $_POST["project"], 'comment' => $_POST["comment"]]);
-        echo "<div class='alert alert-success' role='alert'>添加成功！等待管理员审核</div>";
+        if ($isAdmin == "1")
+            echo "<div class='alert alert-success' role='alert'>添加成功！您是管理员，已自动通过审核</div>";
+        else echo "<div class='alert alert-success' role='alert'>添加成功！等待管理员审核</div>";
     }
     catch (PDOException $e) {
         echo "<div class='alert alert-danger' role='alert'>数据库错误，错误信息：" . $e->getMessage() . "</div>";
@@ -21,7 +32,7 @@ if (isset($_POST["submit"])) {
 ?>
 <head>
     <title>
-        添加收入 - 资金周转管理系统
+        添加收入 - <?php echo $site_name; ?>
     </title>
 </head>
 <body>

@@ -13,7 +13,8 @@ if (isset($_GET['logout'])) {
     echo "<script>window.location.href='login.php';</script>";
     exit();
 }
-global $conn;
+global $conn, $site_name;
+$site_name = "花王项目管理系统";
 if (php_self() != "login.php" && php_self() != "register.php")  {
     echo '<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">

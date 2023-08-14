@@ -1,6 +1,6 @@
 <?php
 include "header.php";
-global $conn;
+global $conn, $site_name;
 if (isset($_POST["submit"])) {
     try {
         $sql = $conn->prepare("UPDATE fee SET name=:name, department_id=:department_id WHERE id=:id;");
@@ -44,7 +44,7 @@ if ($result == null) {
 echo "
 <head>
     <title>
-        编辑费用 - 资金周转管理系统
+        编辑费用 - {$site_name}
     </title>
 </head>
 <body>

@@ -1,9 +1,10 @@
 <?php
 include "header.php";
+global $conn, $site_name;
 ?>
 <head>
     <title>
-        用户管理 - 资金周转管理系统
+        用户管理 - <?php echo $site_name; ?>
     </title>
     <script>
         function del() {
@@ -33,7 +34,6 @@ include "header.php";
                 </thead>
                 <tbody>
                 <?php
-                global $conn;
                 $sql = $conn->prepare("SELECT * FROM user;");
                 $sql->execute();
                 $result = $sql->fetchAll();

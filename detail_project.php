@@ -1,6 +1,6 @@
 <?php
 include "header.php";
-global $conn;
+global $conn, $site_name;
 if (!isset($_GET["project_id"]) or $_GET["project_id"] == "") {
     die("<script>alert('未选择项目');window.location.href='detail.php';</script>");
 }
@@ -13,7 +13,7 @@ if ($sql->rowCount() == 0) {
 $project_name = $sql->fetch()[0];
 ?>
 <head>
-    <title>项目明细 - 资金周转管理系统</title>
+    <title>项目明细 - <?php echo $site_name; ?></title>
 </head>
 <body>
 <div class='container' style='margin-top: 2%;'>

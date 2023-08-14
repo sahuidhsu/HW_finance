@@ -1,5 +1,6 @@
 <?php
 include "header.php";
+global $site_name;
 if (isset($_SESSION['isLogin']) && $_SESSION['isLogin']) {
     echo "<script>window.location.href='index.php';</script>";
     exit;
@@ -17,7 +18,7 @@ if (isset($_POST["submit"])) {
 ?>
 <head>
     <title>
-        用户注册 - 资金周转管理系统
+        用户注册 - <?php echo $site_name; ?>
     </title>
 </head>
 <body class=" d-flex flex-column">
@@ -46,7 +47,7 @@ if (isset($_POST["submit"])) {
                         <select class="form-control" name="department" aria-describedby="department">
                             <option value="999" selected disabled>请选择部门</option>
                             <?php
-                            global $conn;
+                            global $conn, $site_name;
                             $sql = $conn->prepare("SELECT * FROM department;");
                             $sql->execute();
                             $result = $sql->fetchAll();

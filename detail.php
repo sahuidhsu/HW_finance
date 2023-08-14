@@ -1,9 +1,9 @@
 <?php
 include "header.php";
-global $conn;
+global $conn, $site_name;
 ?>
 <head>
-    <title>明细 - 资金周转管理系统</title>
+    <title>明细 - <?php echo $site_name; ?></title>
 </head>
 <body>
 <div class='container' style='margin-top: 2%;'>

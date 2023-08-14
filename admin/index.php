@@ -1,15 +1,15 @@
 <?php
 include "header.php";
+global $conn, $site_name;
 ?>
 <head>
     <title>
-        管理面板 - 资金周转管理系统
+        管理面板 - <?php echo $site_name; ?>
     </title>
 </head>
 <body>
 <div class="container">
     <h1>管理员<?php
-        global $conn;
         echo $_SESSION["username"]
         ?>您好，欢迎使用本系统</h1>
     <h2>请点击上方导航栏选择您需要的功能</h2>

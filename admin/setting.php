@@ -1,6 +1,6 @@
 <?php
 include("header.php");
-global $conn;
+global $conn, $site_name;
 if (isset($_POST['submit'])) {
     try {
         foreach ($_POST['setting_name'] as $key => $value) {
@@ -15,7 +15,11 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-<title>网站设置</title>
+<head>
+    <title>
+        网站设置 - <?php echo $site_name; ?>
+    </title>
+</head>
 <div class="container" style="padding-top:70px;">
     <div class="col-md-12 center-block" style="float: none;">
         <div class="table-responsive">

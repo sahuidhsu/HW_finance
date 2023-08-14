@@ -1,6 +1,6 @@
 <?php
 include "header.php";
-global $conn;
+global $conn, $site_name;
 if (isset($_POST["submit"])) {
     try {
         $sql = $conn->prepare("UPDATE project SET name=:name WHERE id=:id;");
@@ -44,7 +44,7 @@ if ($result == null) {
 echo "
 <head>
     <title>
-        编辑项目 - 资金周转管理系统
+        编辑项目 - {$site_name}
     </title>
 </head>
 <body>

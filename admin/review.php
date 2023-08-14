@@ -1,6 +1,6 @@
 <?php
 include "header.php";
-global $conn;
+global $conn, $site_name;
 if (isset($_GET["action"])) {
     if ($_GET["action"] == "out") {
         try {
@@ -28,7 +28,7 @@ if (isset($_GET["action"])) {
 ?>
 <head>
     <title>
-        审核 - 资金周转管理系统
+        审核 - <?php echo $site_name; ?>
     </title>
     <script>
         function out() {

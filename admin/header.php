@@ -11,7 +11,8 @@ if ((!$_SESSION['isLogin'])) {
 if (!isAdmin($_SESSION["username"])) {
     echo "<script>alert('您不是管理员，无法访问此页面');window.location.href='../index.php';</script>";
 }
-global $conn;
+global $conn, $site_name;
+$site_name = "花王项目管理系统";
 if (php_self() != "login.php" && php_self() != "register.php")  {
     echo '<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">

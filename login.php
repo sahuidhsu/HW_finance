@@ -1,5 +1,6 @@
 <?php
 include "header.php";
+global $site_name;
 if (isset($_SESSION['isLogin']) && $_SESSION['isLogin']) {
     echo "<script>window.location.href='index.php';</script>";
     exit;
@@ -18,7 +19,7 @@ if (isset($_POST["submit"])) {
 ?>
 <head>
     <title>
-        用户登录 - 资金周转管理系统
+        用户登录 - <?php echo $site_name; ?>
     </title>
 </head>
 <body class=" d-flex flex-column">

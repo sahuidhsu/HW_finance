@@ -1,6 +1,6 @@
 <?php
 include "header.php";
-global $conn;
+global $conn, $site_name;
 if (isset($_POST["submit"])) {
     try {
         if ($_POST["password"] != "") {
@@ -54,7 +54,7 @@ if ($result == null) {
 echo "
 <head>
     <title>
-        编辑用户 - 资金周转管理系统
+        编辑用户 - {$site_name}
     </title>
 </head>
 <body>

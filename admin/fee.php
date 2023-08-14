@@ -1,10 +1,10 @@
 <?php
 include "header.php";
-global $conn;
+global $conn, $site_name;
 ?>
 <head>
     <title>
-        费用管理 - 资金周转管理系统
+        费用管理 - <?php echo $site_name; ?>
     </title>
     <script>
         function del(name, dep) {

@@ -1,9 +1,10 @@
 <?php
 include "header.php";
+global $conn, $site_name;
 ?>
 <head>
     <title>
-        项目管理 - 资金周转管理系统
+        项目管理 - <?php echo $site_name; ?>
     </title>
     <script>
         function del() {
@@ -21,7 +22,6 @@ include "header.php";
                 <button type="submit" name="submit" class="btn btn-success">新增一个项目</button>
             </form>
             <?php
-            global $conn;
             if (isset($_POST["submit"])) {
                 if ($_POST["project_name"] == null) {
                     echo "<div class='alert alert-danger' role='alert'>项目名称不能为空！</div>";

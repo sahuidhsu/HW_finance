@@ -1,11 +1,11 @@
 <?php
 include "header.php";
-global $conn;
+global $conn, $site_name;
 $username = $_SESSION["username"];
 ?>
 <head>
     <title>
-        修改密码 - 资金周转管理系统
+        修改密码 - <?php echo $site_name; ?>
     </title>
 </head>
 <body>

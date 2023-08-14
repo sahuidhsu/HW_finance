@@ -1,9 +1,10 @@
 <?php
 include "header.php";
+global $site_name;
 ?>
 <head>
     <title>
-        部门管理 - 资金周转管理系统
+        部门管理 - <?php echo $site_name; ?>
     </title>
     <script>
         function del() {
@@ -21,7 +22,7 @@ include "header.php";
                 <button type="submit" name="submit" class="btn btn-success">新增一个部门</button>
             </form>
             <?php
-            global $conn;
+            global $conn, $site_name;
             if (isset($_POST["submit"])) {
                 if ($_POST["department_name"] == null) {
                     echo "<div class='alert alert-danger' role='alert'>部门名称不能为空！</div>";

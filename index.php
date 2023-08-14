@@ -3,13 +3,13 @@ include "header.php";
 ?>
 <head>
     <title>
-        首页 - 资金周转管理系统
+        首页 - <?php echo $site_name; ?>
     </title>
 </head>
 <body>
 <div class="container">
     <h1>用户<?php
-        global $conn;
+        global $conn, $site_name;
         echo $_SESSION["username"]
         ?>您好，欢迎使用本系统</h1>
     <h2><?php
