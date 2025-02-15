@@ -21,6 +21,9 @@ global $conn, $site_name;
                 <input type="text" name="project_name">
                 <button type="submit" name="submit" class="btn btn-success">新增一个项目</button>
             </form>
+            <form action="" method="post">
+                <button type="submit" name="reorder" class="btn btn-info">重置序号</button>
+            </form>
             <?php
             if (isset($_POST["submit"])) {
                 if ($_POST["project_name"] == null) {
@@ -37,7 +40,36 @@ global $conn, $site_name;
                         echo "<div class='alert alert-danger' role='alert'>数据库错误，错误信息：" . $e->getMessage() . "</div>";
                     }
                 }
-            } ?>
+            }
+            elseif (isset($_POST["reorder"])) {
+                try {
+                    $sql = "SELECT * FROM project ORDER BY id ASC;";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $result = $stmt->fetchAll();
+                    $i = 0;
+                    foreach ($result as $row) {
+                        $i++;
+                        $sql = "UPDATE in_fee SET project_id = " . $i . " WHERE project_id = " . $row["id"] . ";";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $sql = "UPDATE out_fee SET project_id = " . $i . " WHERE project_id = " . $row["id"] . ";";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $sql = "UPDATE project SET id = " . $i . " WHERE id = " . $row["id"] . ";";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                    }
+                    $sql = "ALTER TABLE project AUTO_INCREMENT = " . $i . ";";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    echo "<script>window.location.href='project.php';</script>";
+                }
+                catch (PDOException $e) {
+                    echo "<div class='alert alert-danger' role='alert'>数据库错误，错误信息：" . $e->getMessage() . "</div>";
+                }
+            }
+            ?>
             <table class="table table-striped">
                 <thead>
                 <tr>
