@@ -12,13 +12,13 @@ $result2 = $sql->fetch();
 $sum = $result2["sum"];
 if (isset($_POST["submit"])) {
     $fee_id = $_POST["fee"];
-    $sql = $conn->prepare("SELECT department_id FROM fee WHERE id=:id;");
-    $sql->execute(['id' => $fee_id]);
-    $dep_result = $sql->fetch();
-    if ($dep_result["department_id"] != $department_id) {
-        echo "<div class='alert alert-danger' role='alert'>您无权添加该费用！</div>";
-        exit;
-    }
+//    $sql = $conn->prepare("SELECT department_id FROM fee WHERE id=:id;");
+//    $sql->execute(['id' => $fee_id]);
+//    $dep_result = $sql->fetch();
+//    if ($dep_result["department_id"] != $department_id) {
+//        echo "<div class='alert alert-danger' role='alert'>您无权添加该费用！</div>";
+//        exit;
+//    }
     try {
         $sql = $conn->prepare("SELECT admin FROM user WHERE username=:name;");
         $sql->execute(['name' => $username]);
@@ -81,11 +81,7 @@ if (isset($_POST["submit"])) {
                     $sql2 = $conn->prepare("SELECT * FROM fee;");
                     $sql2->execute();
                     $result3 = $sql2->fetchAll();
-                    foreach ($result3 as $row) {
-                        if ($row["department_id"] == $department_id) {
-                            echo "<option value='" . $row["id"] . "'>" . $row["name"] . "</option>";
-                        }
-                    }
+                    foreach ($result3 as $row) echo "<option value='" . $row["id"] . "'>" . $row["name"] . "</option>";
                 ?>
                 </select>
             </div>

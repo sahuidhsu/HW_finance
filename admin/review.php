@@ -40,12 +40,17 @@ if (isset($_GET["action"])) {
             var msg = "你确定要通过此收入记录吗？"
             return confirm(msg) === true;
         }
+
+        function del_() {
+            var msg = "你确定要删除此记录吗？"
+            return confirm(msg) === true;
+        }
     </script>
 </head>
 <body>
 <div class="container" style="padding-top:70px; margin-bottom: 110px">
     <div class="col-md-10 center-block" style="float: none;">
-        <h2 style="text-align: center">待审核支出记录</h2>
+        <h2 style="text-align: center">支出记录</h2>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -62,7 +67,7 @@ if (isset($_GET["action"])) {
                 </thead>
                 <tbody>
                 <?php
-                $sql = $conn->prepare("SELECT * FROM out_fee WHERE valid = 0;");
+                $sql = $conn->prepare("SELECT * FROM out_fee;");
                 $sql->execute();
                 $result = $sql->fetchAll();
                 foreach ($result as $row) {
@@ -83,13 +88,16 @@ if (isset($_GET["action"])) {
                     $result2 = $sql->fetch();
                     echo "<td>" . $result2["username"] . "</td>";
                     echo "<td>" . $row["add_time"] . "</td>";
-                    echo "<td><a onclick='return out()' href='review.php?action=out&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
+                    if ($row['valid'] == 0)
+                        echo "<td><a onclick='return out()' href='review.php?action=out&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
+                    else
+                        echo "<td><span class='badge bg-success'>已通过</span> <a onclick='return del_()' href='del_fee.php?type=out&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-danger\">删除</button></a></td>";
                     echo "</tr>";
                 }
                 ?>
                 </tbody>
             </table>
-            <h2 style="text-align: center">待审核收入记录</h2>
+            <h2 style="text-align: center">收入记录</h2>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -105,7 +113,7 @@ if (isset($_GET["action"])) {
                     </thead>
                     <tbody>
                     <?php
-                    $sql = $conn->prepare("SELECT * FROM in_fee WHERE valid = 0;");
+                    $sql = $conn->prepare("SELECT * FROM in_fee;");
                     $sql->execute();
                     $result = $sql->fetchAll();
                     foreach ($result as $row) {
@@ -122,13 +130,16 @@ if (isset($_GET["action"])) {
                         $result2 = $sql->fetch();
                         echo "<td>" . $result2["username"] . "</td>";
                         echo "<td>" . $row["add_time"] . "</td>";
-                        echo "<td><a onclick='return in_()' href='review.php?action=in&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
+                        if ($row['valid'] == 0)
+                            echo "<td><a onclick='return in_()' href='review.php?action=in&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
+                        else
+                            echo "<td><span class='badge bg-success'>已通过</span> <a onclick='return del_()' href='del_fee.php?type=in&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-danger\">删除</button></a></td>";
                         echo "</tr>";
                     }
                     ?>
                     </tbody>
                 </table>
+            </div>
         </div>
     </div>
-</div>
 </body>

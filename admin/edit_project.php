@@ -19,6 +19,10 @@ if (!isset($_GET["action"])) {
 }
 if ($_GET["action"] == "delete") {
     try {
+        $sql = $conn->prepare("DELETE FROM in_fee WHERE project_id=:id;");
+        $sql->execute(['id' => $_GET["id"]]);
+        $sql = $conn->prepare("DELETE FROM out_fee WHERE project_id=:id;");
+        $sql->execute(['id' => $_GET["id"]]);
         $sql = $conn->prepare("DELETE FROM project WHERE id=:id;");
         $sql->execute(['id' => $_GET["id"]]);
         echo "<script>window.location.href='project.php';</script>";

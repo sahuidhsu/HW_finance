@@ -8,7 +8,7 @@ global $conn, $site_name;
     </title>
     <script>
         function del() {
-            var msg = "你确定要删除这个项目吗？"
+            var msg = "你确定要删除这个项目吗？所有此项目相关的费用记录将被删除！";
             return confirm(msg) === true;
         }
     </script>

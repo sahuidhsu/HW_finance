@@ -34,6 +34,9 @@ global $conn, $site_name;
                     <button type="submit" name="submit" class="btn btn-success">新增</button>
                 </div>
             </form>
+            <form action="" method="post">
+                <button type="submit" name="reorder" class="btn btn-info">重置序号</button>
+            </form>
             <?php
             if (isset($_POST["submit"])) {
                 if ($_POST["department_id"] == "") {
@@ -53,7 +56,33 @@ global $conn, $site_name;
                         echo "<div class='alert alert-danger' role='alert'>数据库错误，错误信息：" . $e->getMessage() . "</div>";
                     }
                 }
-            } ?>
+            }
+            elseif (isset($_POST["reorder"])) {
+                try {
+                    $sql = "SELECT * FROM fee ORDER BY id ASC;";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $result = $stmt->fetchAll();
+                    $i = 0;
+                    foreach ($result as $row) {
+                        $i++;
+                        $sql = "UPDATE out_fee SET fee_id = " . $i . " WHERE fee_id = " . $row["id"] . ";";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $sql = "UPDATE fee SET id = " . $i . " WHERE id = " . $row["id"] . ";";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                    }
+                    $sql = "ALTER TABLE fee AUTO_INCREMENT = " . $i . ";";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    echo "<script>window.location.href='fee.php';</script>";
+                }
+                catch (PDOException $e) {
+                    echo "<div class='alert alert-danger' role='alert'>数据库错误，错误信息：" . $e->getMessage() . "</div>";
+                }
+            }
+            ?>
             <table class="table table-striped">
                 <thead>
                 <tr>
