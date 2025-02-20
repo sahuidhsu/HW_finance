@@ -63,6 +63,7 @@ global $conn, $site_name;
                 <th scope="col">所属项目</th>
                 <th scope="col">提交人</th>
                 <th scope="col">添加时间</th>
+                <th scope="col">日期</th>
                 <th scope="col">审核状态</th>
             </tr>
             </thead>
@@ -88,6 +89,7 @@ global $conn, $site_name;
                 $result2 = $sql->fetch();
                 echo "<td>" . $result2["username"] . "</td>";
                 echo "<td>" . $row["add_time"] . "</td>";
+                echo "<td>" . $row["date"] . "</td>";
                 if ($row["valid"] == 0) {
                     echo "<td><span class=\"badge bg-warning\">未审核</span></td>";
                 } else {
@@ -109,6 +111,7 @@ global $conn, $site_name;
                 <th scope="col">备注</th>
                 <th scope="col">提交人</th>
                 <th scope="col">添加时间</th>
+                <th scope="col">日期</th>
                 <th scope="col">审核状态</th>
             </tr>
             </thead>
@@ -130,6 +133,7 @@ global $conn, $site_name;
                 $result2 = $sql->fetch();
                 echo "<td>" . $result2["username"] . "</td>";
                 echo "<td>" . $row["add_time"] . "</td>";
+                echo "<td>" . $row["date"] . "</td>";
                 if ($row["valid"] == 0) {
                     echo "<td><span class=\"badge bg-warning\">未审核</span></td>";
                 } else {

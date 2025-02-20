@@ -104,6 +104,7 @@ $project_name = $sql->fetch()[0];
                 <th scope="col">备注</th>
                 <th scope="col">提交人</th>
                 <th scope="col">添加时间</th>
+                <th scope="col">日期</th>
                 <th scope="col">审核状态</th>
             </tr>
             </thead>
@@ -126,6 +127,7 @@ $project_name = $sql->fetch()[0];
                 $result2 = $sql->fetch();
                 echo "<td>" . $result2["username"] . "</td>";
                 echo "<td>" . $row["add_time"] . "</td>";
+                echo "<td>" . $row["date"] . "</td>";
                 if ($row["valid"] == 0) {
                     echo "<td><span class=\"badge bg-warning\">未审核</span></td>";
                 } else {
@@ -147,6 +149,7 @@ $project_name = $sql->fetch()[0];
                 <th scope="col">备注</th>
                 <th scope="col">提交人</th>
                 <th scope="col">添加时间</th>
+                <th scope="col">日期</th>
                 <th scope="col">审核状态</th>
             </tr>
             </thead>
@@ -165,6 +168,7 @@ $project_name = $sql->fetch()[0];
                 $result2 = $sql->fetch();
                 echo "<td>" . $result2["username"] . "</td>";
                 echo "<td>" . $row["add_time"] . "</td>";
+                echo "<td>" . $row["date"] . "</td>";
                 if ($row["valid"] == 0) {
                     echo "<td><span class=\"badge bg-warning\">未审核</span></td>";
                 } else {

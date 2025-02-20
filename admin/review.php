@@ -62,6 +62,7 @@ if (isset($_GET["action"])) {
                     <th scope="col">所属项目</th>
                     <th scope="col">提交人</th>
                     <th scope="col">添加时间</th>
+                    <th scope="col">日期</th>
                     <th scope="col">操作</th>
                 </tr>
                 </thead>
@@ -88,6 +89,7 @@ if (isset($_GET["action"])) {
                     $result2 = $sql->fetch();
                     echo "<td>" . $result2["username"] . "</td>";
                     echo "<td>" . $row["add_time"] . "</td>";
+                    echo "<td>" . $row["date"] . "</td>";
                     if ($row['valid'] == 0)
                         echo "<td><a onclick='return out()' href='review.php?action=out&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
                     else
@@ -108,6 +110,7 @@ if (isset($_GET["action"])) {
                         <th scope="col">所属项目</th>
                         <th scope="col">提交人</th>
                         <th scope="col">添加时间</th>
+                        <th scope="col">日期</th>
                         <th scope="col">操作</th>
                     </tr>
                     </thead>
@@ -130,6 +133,7 @@ if (isset($_GET["action"])) {
                         $result2 = $sql->fetch();
                         echo "<td>" . $result2["username"] . "</td>";
                         echo "<td>" . $row["add_time"] . "</td>";
+                        echo "<td>" . $row["date"] . "</td>";
                         if ($row['valid'] == 0)
                             echo "<td><a onclick='return in_()' href='review.php?action=in&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
                         else

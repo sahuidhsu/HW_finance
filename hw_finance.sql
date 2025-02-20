@@ -90,6 +90,7 @@ CREATE TABLE `in_fee` (
   `amount` decimal(9,2) NOT NULL,
   `user_id` int(11) NOT NULL,
   `add_time` datetime NOT NULL,
+  `date` date NOT NULL,
   `valid` tinyint(4) NOT NULL DEFAULT '0',
   `project_id` int(11) NOT NULL,
   `comment` varchar(128) DEFAULT NULL
@@ -108,6 +109,7 @@ CREATE TABLE `out_fee` (
   `sum` tinyint(4) NOT NULL,
   `user_id` int(11) NOT NULL,
   `add_time` datetime NOT NULL,
+  `date` date NOT NULL,
   `valid` tinyint(4) NOT NULL DEFAULT '0',
   `project_id` int(11) NOT NULL,
   `comment` varchar(128) DEFAULT NULL

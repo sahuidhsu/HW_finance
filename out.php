@@ -24,15 +24,15 @@ if (isset($_POST["submit"])) {
         $sql->execute(['name' => $username]);
         $isAdmin = $sql->fetch()[0];
         if ($isAdmin == "1"){
-            $sql = $conn->prepare("INSERT INTO out_fee (amount, fee_id, sum, user_id, add_time, project_id, comment, valid) VALUES 
-                                                         (:amount, :fee_id, :sum, :user_id, :add_time, :project, :comment, 1);");
+            $sql = $conn->prepare("INSERT INTO out_fee (amount, fee_id, sum, user_id, add_time, date, project_id, comment, valid) VALUES 
+                                                         (:amount, :fee_id, :sum, :user_id, :add_time, :date, :project, :comment, 1);");
         }
         else {
-            $sql = $conn->prepare("INSERT INTO out_fee (amount, fee_id, sum, user_id, add_time, project_id, comment) VALUES 
-                                                         (:amount, :fee_id, :sum, :user_id, :add_time, :project, :comment);");
+            $sql = $conn->prepare("INSERT INTO out_fee (amount, fee_id, sum, user_id, add_time, date, project_id, comment) VALUES 
+                                                         (:amount, :fee_id, :sum, :user_id, :add_time, :date, :project, :comment);");
         }
         $sql->execute(['amount' => $_POST["amount"], 'fee_id' => $_POST["fee"], 'sum' => $sum,
-            'user_id' => $result["id"], 'add_time' => date("Y-m-d H:i:s"), 'project' => $_POST["project"],
+            'user_id' => $result["id"], 'add_time' => date("Y-m-d H:i:s"), 'date' => $_POST["date"], 'project' => $_POST["project"],
             'comment' => $_POST["comment"]]);
         if ($isAdmin == "1")
             echo "<div class='alert alert-success' role='alert'>添加成功！您是管理员，已自动通过审核</div>";
@@ -86,6 +86,10 @@ if (isset($_POST["submit"])) {
                 </select>
             </div>
             <div class="input-group mb-3">
+                <span class="input-group-text" id="time"><i class="fa fa-calendar" style="margin-right: 5px"></i>日期</span>
+                <input type="date" class="form-control" name="date" required>
+            </div>
+            <div class="input-group mb-3">
                 <span class="input-group-text" id="comment"><i class="fa fa-file-lines" style="margin-right: 5px"></i>备注</span>
                 <input type="text" class="form-control" name="comment">
             </div>
@@ -110,6 +114,7 @@ if (isset($_POST["submit"])) {
                 <th scope="col">备注</th>
                 <th scope="col">所属项目</th>
                 <th scope="col">添加时间</th>
+                <th scope="col">日期</th>
                 <th scope="col">审核状态</th>
             </tr>
             </thead>
@@ -135,7 +140,7 @@ if (isset($_POST["submit"])) {
                 }
                 echo "<tr><th scope='row'>" . $row["id"] . "</th><td>" . $row["amount"] . "</td><td>" .
                     $fee_result["name"] . "</td><td>" . $row["comment"] . "</td><td>" . $project . "</td><td>" .
-                    $row["add_time"] . "</td><td>" . $status . "</td></tr>";
+                    $row["add_time"] . "</td><td>" . $row["date"] . "</td><td>" . $status . "</td></tr>";
             }
             ?>
             </tbody>

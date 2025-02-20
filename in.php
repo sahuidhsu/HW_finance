@@ -12,15 +12,15 @@ if (isset($_POST["submit"])) {
         $sql->execute(['name' => $username]);
         $isAdmin = $sql->fetch()[0];
         if ($isAdmin == "1"){
-            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, add_time, project_id, comment, valid) VALUES 
-                                                         (:amount, :user_id, :add_time, :project, :comment, 1);");
+            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, add_time, date, project_id, comment, valid) VALUES 
+                                                         (:amount, :user_id, :add_time, :date, :project, :comment, 1);");
         }
         else {
-            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, add_time, project_id, comment) VALUES 
-                                                         (:amount, :user_id, :add_time, :project, :comment);");
+            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, add_time, date, project_id, comment) VALUES 
+                                                         (:amount, :user_id, :add_time, :date, :project, :comment);");
         }
         $sql->execute(['amount' => $_POST["amount"], 'user_id' => $result["id"],
-            'add_time' => date("Y-m-d H:i:s"), 'project' => $_POST["project"], 'comment' => $_POST["comment"]]);
+            'add_time' => date("Y-m-d H:i:s"), 'date' => $_POST["date"], 'project' => $_POST["project"], 'comment' => $_POST["comment"]]);
         if ($isAdmin == "1")
             echo "<div class='alert alert-success' role='alert'>添加成功！您是管理员，已自动通过审核</div>";
         else echo "<div class='alert alert-success' role='alert'>添加成功！等待管理员审核</div>";
@@ -61,6 +61,10 @@ if (isset($_POST["submit"])) {
                 <span class='input-group-text' id='amount'><i class="fa fa-money-bill" style="margin-right: 5px"></i>数额</span>
                 <input type='text' class='form-control' oninput="value=value.replace(/[^\d\.]/g,'')" name='amount' required>
             </div>
+            <div class='input-group mb-3'>
+                <span class='input-group-text' id='date'><i class="fa fa-calendar" style="margin-right: 5px"></i>日期</span>
+                <input type='date' class='form-control' name='date' required>
+            </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="comment"><i class="fa fa-file-lines" style="margin-right: 5px"></i>备注</span>
                 <input type="text" class="form-control" name="comment">
@@ -85,6 +89,7 @@ if (isset($_POST["submit"])) {
                 <th scope="col">所属项目</th>
                 <th scope="col">备注</th>
                 <th scope="col">添加时间</th>
+                <th scope="col">日期</th>
                 <th scope="col">审核状态</th>
             </tr>
             </thead>
@@ -106,7 +111,8 @@ if (isset($_POST["submit"])) {
                     $status = "<span class='badge bg-danger'>未知状态</span>";
                 }
                 echo "<tr><th scope='row'>" . $row["id"] . "</th><td>" . $row["amount"] . "</td><td>" . $project .
-                    "</td><td>" . $row["comment"] . "</td><td>" . $row["add_time"] . "</td><td>" . $status . "</td></tr>";
+                    "</td><td>" . $row["comment"] . "</td><td>" . $row["add_time"] . "</td><td>" . $row["date"] .
+                    "</td><td>" . $status . "</td></tr>";
             }
             ?>
             </tbody>
