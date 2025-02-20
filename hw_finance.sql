@@ -88,6 +88,7 @@ INSERT INTO `fee` (`id`, `name`, `department_id`) VALUES
 CREATE TABLE `in_fee` (
   `id` int(11) NOT NULL,
   `amount` decimal(9,2) NOT NULL,
+  `department_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `add_time` datetime NOT NULL,
   `date` date NOT NULL,
