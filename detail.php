@@ -107,6 +107,7 @@ global $conn, $site_name;
             <thead>
             <tr>
                 <th scope="col">数额</th>
+                <th scope="col">部门</th>
                 <th scope="col">所属项目</th>
                 <th scope="col">备注</th>
                 <th scope="col">提交人</th>
@@ -121,8 +122,12 @@ global $conn, $site_name;
             $sql->execute();
             $result = $sql->fetchAll();
             foreach ($result as $row) {
+                $sql = $conn->prepare("SELECT name FROM department WHERE id = :id");
+                $sql->execute(["id" => $row["department_id"]]);
+                $result2 = $sql->fetch();
                 echo "<tr>";
                 echo "<td>" . $row["amount"] . "</td>";
+                echo "<td>" . $result2["name"] . "</td>";
                 $sql = $conn->prepare("SELECT name FROM project WHERE id = :id");
                 $sql->execute(["id" => $row["project_id"]]);
                 $result2 = $sql->fetch();

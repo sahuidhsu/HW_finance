@@ -8,18 +8,21 @@ $result = $sql->fetch();
 $department_id = $result["department_id"];
 if (isset($_POST["submit"])) {
     try {
+        if ($_POST["department_id"] == "") {
+            die("<div class='alert alert-danger' role='alert'>请选择部门</div>");
+        }
         $sql = $conn->prepare("SELECT admin FROM user WHERE username=:name;");
         $sql->execute(['name' => $username]);
         $isAdmin = $sql->fetch()[0];
         if ($isAdmin == "1"){
-            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, add_time, date, project_id, comment, valid) VALUES 
-                                                         (:amount, :user_id, :add_time, :date, :project, :comment, 1);");
+            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, department_id, add_time, date, project_id, comment, valid) VALUES 
+                                                         (:amount, :user_id, :department_id, :add_time, :date, :project, :comment, 1);");
         }
         else {
-            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, add_time, date, project_id, comment) VALUES 
-                                                         (:amount, :user_id, :add_time, :date, :project, :comment);");
+            $sql = $conn->prepare("INSERT INTO in_fee (amount, user_id, department_id, add_time, date, project_id, comment) VALUES 
+                                                         (:amount, :user_id, :department_id, :add_time, :date, :project, :comment);");
         }
-        $sql->execute(['amount' => $_POST["amount"], 'user_id' => $result["id"],
+        $sql->execute(['amount' => $_POST["amount"], 'user_id' => $result["id"], 'department_id' => $_POST["department_id"],
             'add_time' => date("Y-m-d H:i:s"), 'date' => $_POST["date"], 'project' => $_POST["project"], 'comment' => $_POST["comment"]]);
         if ($isAdmin == "1")
             echo "<div class='alert alert-success' role='alert'>添加成功！您是管理员，已自动通过审核</div>";
@@ -61,6 +64,20 @@ if (isset($_POST["submit"])) {
                 <span class='input-group-text' id='amount'><i class="fa fa-money-bill" style="margin-right: 5px"></i>数额</span>
                 <input type='text' class='form-control' oninput="value=value.replace(/[^\d\.]/g,'')" name='amount' required>
             </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="department"><i class="fa fa-building" style="margin-right: 5px"></i>部门</span>
+                <select class="form-select" name="department_id">
+                    <option value="" disabled selected>请选择部门</option>
+                    <?php
+                    $sql = $conn->prepare("SELECT * FROM department;");
+                    $sql->execute();
+                    $result2 = $sql->fetchAll();
+                    foreach ($result2 as $row) {
+                        echo "<option value='" . $row["id"] . "'>" . $row["name"] . "</option>";
+                    }
+                    ?>
+                </select>
+            </div>
             <div class='input-group mb-3'>
                 <span class='input-group-text' id='date'><i class="fa fa-calendar" style="margin-right: 5px"></i>日期</span>
                 <input type='date' class='form-control' name='date' required>
@@ -87,6 +104,7 @@ if (isset($_POST["submit"])) {
                 <th scope="col">#</th>
                 <th scope="col">数额</th>
                 <th scope="col">所属项目</th>
+                <th scope="col">部门</th>
                 <th scope="col">备注</th>
                 <th scope="col">添加时间</th>
                 <th scope="col">日期</th>
@@ -101,6 +119,10 @@ if (isset($_POST["submit"])) {
                 $sql->execute(['id' => $row["project_id"]]);
                 $project_result = $sql->fetch();
                 $project = $project_result["name"];
+                $sql = $conn->prepare("SELECT name FROM department WHERE id=:id;");
+                $sql->execute(['id' => $row["department_id"]]);
+                $department_result = $sql->fetch();
+                $department = $department_result["name"];
                 if ($status_result == 0) {
                     $status = "<span class='badge bg-warning text-dark'>待审核</span>";
                 }
@@ -110,7 +132,7 @@ if (isset($_POST["submit"])) {
                 else {
                     $status = "<span class='badge bg-danger'>未知状态</span>";
                 }
-                echo "<tr><th scope='row'>" . $row["id"] . "</th><td>" . $row["amount"] . "</td><td>" . $project .
+                echo "<tr><th scope='row'>" . $row["id"] . "</th><td>" . $row["amount"] . "</td><td>" . $project . "</td><td>" . $department .
                     "</td><td>" . $row["comment"] . "</td><td>" . $row["add_time"] . "</td><td>" . $row["date"] .
                     "</td><td>" . $status . "</td></tr>";
             }

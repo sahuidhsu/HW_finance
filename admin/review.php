@@ -107,6 +107,7 @@ if (isset($_GET["action"])) {
                         <th scope="col">#</th>
                         <th scope="col">数额</th>
                         <th scope="col">备注</th>
+                        <th scope="col">部门</th>
                         <th scope="col">所属项目</th>
                         <th scope="col">提交人</th>
                         <th scope="col">添加时间</th>
@@ -124,6 +125,10 @@ if (isset($_GET["action"])) {
                         echo "<th scope=\"row\">" . $row["id"] . "</th>";
                         echo "<td>" . $row["amount"] . "</td>";
                         echo "<td>" . $row["comment"] . "</td>";
+                        $sql = $conn->prepare("SELECT name FROM department WHERE id=:id;");
+                        $sql->execute(['id' => $row["department_id"]]);
+                        $department_result = $sql->fetch();
+                        echo "<td>" . $department_result["name"] . "</td>";
                         $sql = $conn->prepare("SELECT name FROM project WHERE id=:id;");
                         $sql->execute(['id' => $row["project_id"]]);
                         $project_result = $sql->fetch();

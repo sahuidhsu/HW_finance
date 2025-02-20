@@ -146,6 +146,7 @@ $project_name = $sql->fetch()[0];
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">数额</th>
+                <th scope="col">部门</th>
                 <th scope="col">备注</th>
                 <th scope="col">提交人</th>
                 <th scope="col">添加时间</th>
@@ -159,9 +160,14 @@ $project_name = $sql->fetch()[0];
             $sql->execute(["project" => $project_id]);
             $result = $sql->fetchAll();
             foreach ($result as $row) {
+                $sql = $conn->prepare("SELECT name FROM department WHERE id = :id;");
+                $sql->execute(["id" => $row["department_id"]]);
+                $result2 = $sql->fetch();
+                $department = $result2["name"];
                 echo "<tr>";
                 echo "<td>" . $row["id"] . "</td>";
                 echo "<td>" . $row["amount"] . "</td>";
+                echo "<td>" . $department . "</td>";
                 echo "<td>" . $row["comment"] . "</td>";
                 $sql = $conn->prepare("SELECT username FROM user WHERE id = :id;");
                 $sql->execute(["id" => $row["user_id"]]);
