@@ -91,9 +91,12 @@ if (isset($_GET["action"])) {
                     echo "<td>" . $row["add_time"] . "</td>";
                     echo "<td>" . $row["date"] . "</td>";
                     if ($row['valid'] == 0)
-                        echo "<td><a onclick='return out()' href='review.php?action=out&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
+                        echo "<td><a href='review_edit_out.php?id=" . $row["id"] . "'><button type='button' class='btn-info'>编辑</button></a> 
+                            <a onclick='return out()' href='review.php?action=out&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
                     else
-                        echo "<td><span class='badge bg-success'>已通过</span> <a onclick='return del_()' href='del_fee.php?type=out&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-danger\">删除</button></a></td>";
+                        echo "<td><span class='badge bg-success'>已通过</span> 
+                            <a href='review_edit_out.php?id=" . $row["id"] . "'><button type='button' class='btn-info'>编辑</button></a> 
+                            <a onclick='return del_()' href='del_fee.php?type=out&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-danger\">删除</button></a></td>";
                     echo "</tr>";
                 }
                 ?>
@@ -140,9 +143,12 @@ if (isset($_GET["action"])) {
                         echo "<td>" . $row["add_time"] . "</td>";
                         echo "<td>" . $row["date"] . "</td>";
                         if ($row['valid'] == 0)
-                            echo "<td><a onclick='return in_()' href='review.php?action=in&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
+                            echo "<td><a href='review_edit_in.php?id=" . $row["id"] . "'><button type='button' class='btn-info'>编辑</button></a> 
+                                <a onclick='return in_()' href='review.php?action=in&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-primary\">通过</button></a></td>";
                         else
-                            echo "<td><span class='badge bg-success'>已通过</span> <a onclick='return del_()' href='del_fee.php?type=in&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-danger\">删除</button></a></td>";
+                            echo "<td><span class='badge bg-success'>已通过</span> 
+                                <a href='review_edit_in.php?id=" . $row["id"] . "'><button type='button' class='btn-info'>编辑</button></a> 
+                                <a onclick='return del_()' href='del_fee.php?type=in&id=" . $row["id"] . "'><button type=\"button\" class=\"btn btn-danger\">删除</button></a></td>";
                         echo "</tr>";
                     }
                     ?>
