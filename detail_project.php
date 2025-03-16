@@ -4,6 +4,8 @@ global $conn, $site_name;
 if (!isset($_GET["project_id"]) or $_GET["project_id"] == "") {
     die("<script>alert('未选择项目');window.location.href='detail.php';</script>");
 }
+$in_fee_id = $_GET["in_fee_id"] ?? 999;
+$out_fee_id = $_GET["out_fee_id"] ?? 999;
 $project_id = $_GET["project_id"];
 $sql = $conn->prepare("SELECT name FROM project WHERE id = :id;");
 $sql->execute(["id" => $project_id]);
@@ -94,6 +96,24 @@ $project_name = $sql->fetch()[0];
     }
     ?>
     <h2 style="text-align: center; margin-top: 15px">所有支出记录</h2>
+    <form action="" type="GET">
+        <div class="input-group">
+            <label type="text" class="input-group-text">筛选支出类型：</label>
+            <input type="hidden" name="project_id" value="<?php echo $project_id ?>">
+            <select class='form-select' name="out_fee_id">
+                <option value="999">无</option>
+                <?php
+                $sql = $conn->prepare("SELECT * FROM fee");
+                $sql->execute();
+                $result = $sql->fetchAll();
+                foreach ($result as $row) {
+                    echo "<option value='{$row["id"]}'" . ($row["id"]==$out_fee_id ? "selected" : "") . ">{$row["name"]}</option>";
+                }
+                ?>
+            </select>
+            <button class="btn btn-primary" type="submit">筛选</button>
+        </div>
+    </form>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -110,7 +130,7 @@ $project_name = $sql->fetch()[0];
             </thead>
             <tbody>
             <?php
-            $sql = $conn->prepare("SELECT * FROM out_fee WHERE project_id = :project ORDER BY id DESC;");
+            $sql = $conn->prepare("SELECT * FROM out_fee WHERE project_id = :project " . ($out_fee_id!=999 ? "AND fee_id = {$out_fee_id}": "") . " ORDER BY id DESC;");
             $sql->execute(["project" => $project_id]);
             $result = $sql->fetchAll();
             foreach ($result as $row) {
@@ -140,6 +160,24 @@ $project_name = $sql->fetch()[0];
         </table>
     </div>
     <h2 style="text-align: center">所有收入记录</h2>
+    <form action="" type="GET">
+        <div class="input-group">
+            <label type="text" class="input-group-text">筛选部门：</label>
+            <input type="hidden" name="project_id" value="<?php echo $project_id ?>">
+            <select class='form-select' name="in_fee_id">
+                <option value="999">无</option>
+                <?php
+                $sql = $conn->prepare("SELECT * FROM department");
+                $sql->execute();
+                $result = $sql->fetchAll();
+                foreach ($result as $row) {
+                    echo "<option value='{$row["id"]}'" . ($row["id"]==$in_fee_id ? "selected" : "") . ">{$row["name"]}</option>";
+                }
+                ?>
+            </select>
+            <button class="btn btn-primary" type="submit">筛选</button>
+        </div>
+    </form>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -156,7 +194,7 @@ $project_name = $sql->fetch()[0];
             </thead>
             <tbody>
             <?php
-            $sql = $conn->prepare("SELECT * FROM in_fee WHERE project_id = :project ORDER BY id DESC;");
+            $sql = $conn->prepare("SELECT * FROM in_fee WHERE project_id = :project " . ($in_fee_id!=999 ? "AND department_id = {$in_fee_id}": "") . " ORDER BY id DESC;");
             $sql->execute(["project" => $project_id]);
             $result = $sql->fetchAll();
             foreach ($result as $row) {
