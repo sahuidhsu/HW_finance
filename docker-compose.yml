@@ -1,0 +1,10 @@
+﻿services:
+  app:
+    image: ghcr.io/sahuidhsu/hw_finance:latest
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./config.php:/var/www/html/config.php:ro
+    environment:
+      TZ: Asia/Shanghai

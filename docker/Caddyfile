@@ -1,0 +1,12 @@
+﻿:80 {
+	root * /var/www/html
+	encode gzip zstd
+
+	@blocked {
+		path /config.php /hw_finance.sql /docker/* /.git* /.github/*
+	}
+	respond @blocked 404
+
+	php_fastcgi 127.0.0.1:9000
+	file_server
+}
