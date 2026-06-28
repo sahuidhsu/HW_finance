@@ -1,6 +1,6 @@
 <?php
-include "include/common.php";
 session_start();
+include "include/common.php";
 if (!isset($_SESSION['isLogin'])) {
     $_SESSION['isLogin'] = false;
 }
